@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -16,6 +17,10 @@ func (hh HelloHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(w, "hello from environment: \"%v\"\n", hh.env)
 }
 
+func health(w http.ResponseWriter, _ *http.Request) {
+	io.WriteString(w, "OK")
+}
+
 func main() {
 	var ENV = os.Getenv("ENV")
 	if len(ENV) < 1 {
@@ -25,6 +30,7 @@ func main() {
 	hh := HelloHandler{env: ENV}
 
 	http.Handle("/hello", hh)
+	http.HandleFunc("/health", health)
 
 	const addr = ":8000"
 

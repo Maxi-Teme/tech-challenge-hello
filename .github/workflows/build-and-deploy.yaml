@@ -1,12 +1,6 @@
 name: Build and deploy
 on:
-  workflow_dispatch:
   push:
-    branches:
-      - dev
-      - stg
-      - prod
-  pull_request:
     branches:
       - dev
       - stg
@@ -35,11 +29,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install kubectl
-        run: |
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x ./kubectl
-
       - name: Set kubectl config
         run: |
           sed -i -e "s|__KUBE_CA__|$KUBE_CA|g" \
@@ -52,5 +41,5 @@ jobs:
           KUBECONFIG: ./kube.config
         run: |
           sed -i -e "s|__IMAGE__|$IMAGE_TAG|g" -e "s|__ENV__|$ENV|g" deployment.yaml
-            ./kubectl apply -f deployment.yaml
-            ./kubectl apply -f service.yaml
+          kubectl apply -f deployment.yaml
+          kubectl apply -f service.yaml
