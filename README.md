@@ -2,7 +2,7 @@
 
 ## init
 
-`go mod init hello && go mod tidy`
+`go mod init hello && go mod tidy && go get .`
 
 ## build
 

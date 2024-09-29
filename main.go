@@ -12,9 +12,9 @@ type HelloHandler struct {
 	env string
 }
 
-func (hh HelloHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+func (helloHandler HelloHandler) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	fmt.Printf("Got request %v\n", req)
-	fmt.Fprintf(w, "hello from environment: \"%v\"\n", hh.env)
+	fmt.Fprintf(w, "hello from environment: \"%v\"\n", helloHandler.env)
 }
 
 func health(w http.ResponseWriter, _ *http.Request) {
@@ -31,9 +31,9 @@ func main() {
 		log.Fatal("ERROR: please provide environment varialbe 'ENV'")
 	}
 
-	hh := HelloHandler{env: ENV}
+	helloHandler := HelloHandler{env: ENV}
 
-	http.Handle("/hello", hh)
+	http.Handle("/hello", helloHandler)
 	http.HandleFunc("/health", health)
 
 	var addr = fmt.Sprintf(":%v", PORT)
